@@ -1,5 +1,8 @@
 ﻿#include "VectorTool.h"
 
+// 浅拷贝（shallow copy）：只是拷贝指针的地址，多个对象指向同一块内存。（某个地方释放了，但是其他地方还在用，就会导致其他指针悬空或者崩溃）
+// 深拷贝（deep copy）：会重新分配内存并复制内容，两个对象互不影响。
+
 // ================= node class of list ====================
 class Node {
 public:
@@ -7,20 +10,28 @@ public:
     Node* next;
 
     Node(int data) :value(data), next(nullptr) {}
-    Node(Node* dataNode) {
-        value = dataNode->value;
-        next = dataNode->next;
+    Node(const Node& dataNode) {    // 深拷贝
+        value = dataNode.value;
+        // 每次调用 Node(*dataNode.next)，其实是处理链表中的“下一个节点”，所以不会死循环
+        next = dataNode.next ? new Node(*dataNode.next) : nullptr;
     }
 
-    Node& operator=(Node& dataNode) {
+    Node& operator=(const Node& dataNode) {
         if (this == &dataNode) {
             return *this;
         }
 
         value = dataNode.value;
-        next = dataNode.next;
+        delete next;
+        next = dataNode.next ? new Node(*dataNode.next) : nullptr;
         return *this;   // this本身是个指针，需要解析这个指针，才能返回引用
     }
+
+    /* 因为后面有设置释放函数，所以这个析构函数可写可不写
+    ~Node() {
+        delete next;    // 因为是链表结构，所以这里的析构其实是有问题的
+        next = nullptr;
+    }*/
 };
 
 class DoubleNode {
@@ -30,23 +41,32 @@ public:
     DoubleNode* next;
 
     DoubleNode(int value) :value(value), pre(nullptr), next(nullptr) {}
-    DoubleNode(DoubleNode* dataNode) {
-        value = dataNode->value;
-        pre = dataNode->pre;
-        next = dataNode->next;
+    DoubleNode(const DoubleNode& dataNode) {    // 浅拷贝
+        value = dataNode.value;
+        pre = dataNode.pre ? new DoubleNode(*dataNode.pre) : nullptr;
+        next = dataNode.next ? new DoubleNode(*dataNode.next) : nullptr;
     }
 
-    DoubleNode& operator=(DoubleNode& dataNode) {
+    DoubleNode& operator=(const DoubleNode& dataNode) {
         if (this == &dataNode) {
             return *this;   // 自赋值检查（地址一致就返回自己就行）
         }
 
         value = dataNode.value;
-        pre = dataNode.pre;
-        next = dataNode.next;
+        pre = dataNode.pre ? new DoubleNode(*dataNode.pre) : nullptr;
+        next = dataNode.next ? new DoubleNode(*dataNode.next) : nullptr;
 
         return *this;
     }
+
+    /* 因为后面有设置释放函数，所以这个析构函数可写可不写
+    ~DoubleNode() {
+        delete pre;
+        pre = nullptr;
+
+        delete next;
+        next = nullptr;
+    }*/
 };
 
 // ================= print ==================
@@ -93,6 +113,7 @@ void FreeDoubleNodeList(DoubleNode* node) {
         DoubleNode* temp = node;
         node = node->next;
         delete temp;
+        temp = nullptr;
     }
 }
 
@@ -134,7 +155,7 @@ DoubleNode* ReverseDoubleList(DoubleNode* head) {
     return preNode;
 }
 
-int main_class04() {
+int main_class04_01() {
     /* Node
     Node* first = new Node(1);
     first->next = new Node(2);
