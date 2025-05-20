@@ -41,9 +41,11 @@ public:
     DoubleNode* next;
 
     DoubleNode(int value) :value(value), pre(nullptr), next(nullptr) {}
-    DoubleNode(const DoubleNode& dataNode) {    // 浅拷贝
+    DoubleNode(const DoubleNode& dataNode) {    // 深拷贝
         value = dataNode.value;
+        delete pre;
         pre = dataNode.pre ? new DoubleNode(*dataNode.pre) : nullptr;
+        delete next;
         next = dataNode.next ? new DoubleNode(*dataNode.next) : nullptr;
     }
 
@@ -53,7 +55,9 @@ public:
         }
 
         value = dataNode.value;
+        delete pre;
         pre = dataNode.pre ? new DoubleNode(*dataNode.pre) : nullptr;
+        delete next;
         next = dataNode.next ? new DoubleNode(*dataNode.next) : nullptr;
 
         return *this;
