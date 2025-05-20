@@ -30,15 +30,21 @@
     <ClCompile Include="Class03_BinarySearch.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="Class04_01_List.cpp">
+    <ClCompile Include="Class04_01_ListByNode.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="Class04_02_StackByList.cpp">
+    <ClCompile Include="Class04_02_QueueByNode.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Class04_03_StackByNode.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="VectorTool.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Node_template.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

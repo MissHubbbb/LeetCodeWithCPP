@@ -1,71 +1,4 @@
-﻿#include <iostream>
-
-using namespace std;
-
-template <class T>
-class Node
-{
-public:
-    Node() : value(T()), next(nullptr) {}
-    Node(T data) :value(data), next(nullptr) {}
-    Node(const Node& dataNode) {
-        value = dataNode.value;
-        next = dataNode.next ? new Node<T>(*dataNode.next) : nullptr;
-    }
-
-    Node<T>& operator=(const Node& curNode) {
-        if (this == &curNode) {
-            return *this;
-        }
-
-        value = curNode.value;
-        delete next;
-        next = curNode.next ? new Node<T>(*curNode.next) : nullptr;
-        return *this;       // this本身是个指针，需要解析这个指针，才能返回引用
-    }
-
-    // 链表单个节点的析构函数有风险，最好还是在使用完后手动释放
-    /*
-    ~Node() {
-        // 析构函数中 if (this != nullptr) 是无意义的，this 永远不可能是 nullptr，因为调用析构函数意味着对象已经存在，所以这句判断是冗余的。
-        // if (this != nullptr)
-
-        delete next;    // 这里的析构方式是「递归释放整个链表」，这在某些场景中是危险的
-        next = nullptr; // 应该置空指针防止野指针
-    }*/
-
-    /* 安全版本
-    ~Node() {
-        next = nullptr;     // 不做递归delete
-    }*/
-
-    T value;
-    Node<T>* next;
-};
-
-template <class T>
-void PrintList(Node<T>* node) {
-    while (node != nullptr) {
-        cout << node->value << endl;
-        node = node->next;
-    }
-}
-
-template <class T>
-void FreeLinkedList(Node<T>* node) {
-    if (node == nullptr) {
-        return;
-    }
-
-    while (node != nullptr) {
-        Node<T>* temp = node;
-        node = node->next;
-        delete temp;
-    }
-
-    if (node == nullptr)
-        cout << "Node cleaned!" << endl;
-}
+﻿#include "Node_template.h"
 
 template <class T>
 class MyQueue
@@ -124,6 +57,8 @@ public:
     // 获取顶部元素的值
     T Peek() {
         if (head == nullptr) {
+            // T t = T(); 是值初始化，会清零； 
+            // C++ 的 值初始化（value initialization） 规则
             return T();
         }
 
@@ -144,7 +79,7 @@ private:
     int size;
 };
 
-int main() {
+int main_class04_02() {
     /* Node类模板的使用测试
     Node<int>* testNode = new Node<int>(6);
     Node<int>* testNode1(testNode);
@@ -166,7 +101,6 @@ int main() {
     cout << myqu.Poll() << endl;
     cout << myqu.Poll() << endl;
     cout << myqu.Poll() << endl;
-
 
     return 0;
 }

@@ -129,13 +129,15 @@
   <ItemGroup>
     <ClCompile Include="Class02_PreSum.cpp" />
     <ClCompile Include="Class03_BinarySearch.cpp" />
-    <ClCompile Include="Class04_01_List.cpp" />
-    <ClCompile Include="Class04_02_StackByList.cpp" />
+    <ClCompile Include="Class04_01_ListByNode.cpp" />
+    <ClCompile Include="Class04_02_QueueByNode.cpp" />
+    <ClCompile Include="Class04_03_StackByNode.cpp" />
     <ClCompile Include="DirectXTest.cpp" />
     <ClCompile Include="Class01_SortAlgorithm.cpp" />
     <ClCompile Include="VectorTool.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Node_template.h" />
     <ClInclude Include="VectorTool.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
